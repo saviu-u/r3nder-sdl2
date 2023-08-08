@@ -31,7 +31,7 @@ void Screen::show()
 // Main loop, do the drawing here
 void Screen::update()
 {
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
   std::vector<vec2> screenVertices;
   for (vec3 vertice : sceneObject->calculateVertices())

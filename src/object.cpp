@@ -44,7 +44,7 @@ std::vector<vec3> Object::rotationMatrix(){
 }
 
 void Object::debugMovement(){
-  debugFrameCount += 1/10000.0f; // This is an approximation, this depends on your processor
+  debugFrameCount += 1/100.0f; // This is an approximation, this depends on your processor
   if(debugFrameCount >= 10000) debugFrameCount=0;
 
   rotation.x = debugFrameCount * 15;

@@ -25,10 +25,16 @@ int main()
   object.localVertices = &cubeVertices;
   object.edgeIndexes = &edgeIndexes;
 
+
+
   Screen screen(&object);
+   
+
 
   screen.show();
   screen.close();
+  
+ 
 
   return 0;
 }

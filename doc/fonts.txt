@@ -1,0 +1,29 @@
+OpenGL Documentation:
+
+OpenGL Official Website
+OpenGL Wiki
+Learn OpenGL: A comprehensive online tutorial to learn modern OpenGL programming.
+DirectX Documentation:
+
+DirectX Developer Center
+Introduction to 3D Game Programming with DirectX 12: A comprehensive guide to DirectX 12 programming.
+SDL Documentation:
+
+SDL Official Website
+Lazy Foo' Productions: Offers a series of SDL tutorials including 2D graphics and game development.
+Computer Graphics Concepts:
+
+Computer Graphics Principles and Practice: A widely used textbook on computer graphics.
+Real-Time Rendering: Comprehensive resource on various aspects of real-time rendering.
+Online Forums and Communities:
+
+Stack Overflow - OpenGL: A place to ask questions and find answers related to OpenGL.
+GameDev.net: An online community for game developers with forums, articles, and resources.
+Video Tutorials:
+
+TheCherno's YouTube Channel: Offers tutorials on C++ game development including graphics and rendering.
+OpenGL Programming: A YouTube playlist covering OpenGL basics and beyond.
+Blogs and Articles:
+
+Scratchapixel: Provides in-depth articles on computer graphics theory and practical implementation.
+Paul Bourke's Computer Graphics Pages: Contains a variety of articles and resources related to computer graphics.
