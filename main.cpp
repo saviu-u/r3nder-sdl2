@@ -1,33 +1,26 @@
 #include <SDL2/SDL.h>
 #include "src/screen.h"
+#include "src/prebuilt/cube.h"
 #include "src/object.h"
 
 int main()
 {
-  std::vector<vec3> cubeVertices = {
-      {-100, -100, -100},
-      {-100, -100, 100},
-      {100, -100, -100},
-      {100, -100, 100},
-      {-100, 100, -100},
-      {-100, 100, 100},
-      {100, 100, -100},
-      {100, 100, 100},
-  };
-  std::vector<std::vector<int>> edgeIndexes = {
-      {0, 1}, {0, 4}, {0, 2},
-      {7, 5}, {7, 3}, {7, 6},
-      {5, 1}, {5, 4}, {1, 3},
-      {6, 2}, {6, 4}, {2, 3}
-  };
+  Prebuilt::Cube mainCube(100);
+  mainCube.position = { 0, 0, 700 };
+  mainCube.rotation = { 20, 0, 0 };
 
-  Object object;
-  object.localVertices = &cubeVertices;
-  object.edgeIndexes = &edgeIndexes;
+  Prebuilt::Cube cube(50);
+  cube.position = { -200, 0, 700 };
 
-  Screen screen(&object);
+  Screen screen;
+  screen.addObjectToScene(&mainCube);
+  screen.addObjectToScene(&cube);
 
-  screen.show();
+  screen.show([&cube, &mainCube] (float deltaTime) {
+    mainCube.rotation.x += 45 * deltaTime;
+    mainCube.rotation.y += 45 * deltaTime;
+    mainCube.rotation.z += 45 * deltaTime;
+  });
   screen.close();
 
   return 0;

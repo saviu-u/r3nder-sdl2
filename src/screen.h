@@ -2,45 +2,64 @@
 
 #include <SDL2/SDL.h>
 #include <vector>
+#include <string>
+#include <functional>
 
 #include "object.h"
 #include "space.h"
 
 class Screen
 {
+// Methods
 public:
-  Screen(Object* object);
-  void show();
+  Screen();
+
+  void show(std::function<void(float deltaTime)> update);
   void close();
   void cleanScreen();
-  std::vector<vec3> mainObject;
+  void addObjectToScene(Object* object);
 
 protected:
   const vec2 vScreenToScreen(vec2 point);
   const vec3 projectIntoScreen(vec3 point);
 
   void verifyScreenInput();
-  void update();
+  void renderObjects();
+  void renderObject(Object*);
 
-  float screenSizeX = 800;
-  float screenSizeY = 600;
+private:
+  void refreshScreenSize();
+  void refreshFov();
+  void refreshAspectRatio();
+  const float degToRad(float degree);
+  const float radToDeg(float rad);
 
-  float Hfov = 90;
-  float Vfov = 74;
+// Attributes
 
-  float vScreenSizeX;
-  float vScreenSizeY;
-
-  float vScreenDistance = 1; // Centimeter
-
-  Object* sceneObject;
-  bool quit = 0;
-
+protected:
+  // SDL attributes
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Event event;
 
-private:
-  void refreshScreenSize();
-  const float degToRad(float degree);
+  // Screen attributes
+  float screenSizeX = 800;
+  float screenSizeY = 600;
+
+  float FpsCap = 120;
+  float Hfov = 90;
+  float vScreenDistance = 1; // Centimeter
+
+  // Calculation dependent
+
+  float Vfov;
+  float aspectRatio;
+  float vScreenSizeX;
+  float vScreenSizeY;
+
+  // Objects
+  std::vector<Object*> sceneObjects;
+
+  // Meta
+  bool quit = 0;
 };

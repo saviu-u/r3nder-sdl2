@@ -5,12 +5,8 @@ std::vector<vec3> Object::calculateVertices()
 {
   std::vector<vec3> newVertices;
 
-  for (vec3 point : *localVertices)
-  {
+  for (vec3 point : localVertices)
     newVertices.push_back(updatedVertice(point));
-  }
-
-  debugMovement();
 
   return newVertices;
 }
@@ -41,15 +37,6 @@ std::vector<vec3> Object::rotationMatrix(){
     { cos(degToRad(rotation.z)) * sin(degToRad(rotation.y)) * sin(degToRad(rotation.x)) - sin(degToRad(rotation.z)) * cos(degToRad(rotation.x)), sin(degToRad(rotation.z)) * sin(degToRad(rotation.y)) * sin(degToRad(rotation.x)) + cos(degToRad(rotation.z)) * cos(degToRad(rotation.x)), cos(degToRad(rotation.y)) * sin(degToRad(rotation.x)) },
     { cos(degToRad(rotation.z)) * sin(degToRad(rotation.y)) * cos(degToRad(rotation.x)) + sin(degToRad(rotation.z)) * sin(degToRad(rotation.x)), sin(degToRad(rotation.z)) * sin(degToRad(rotation.y)) * cos(degToRad(rotation.x)) - cos(degToRad(rotation.z)) * sin(degToRad(rotation.x)), cos(degToRad(rotation.y)) * cos(degToRad(rotation.x)) }
   };
-}
-
-void Object::debugMovement(){
-  debugFrameCount += 1/10000.0f; // This is an approximation, this depends on your processor
-  if(debugFrameCount >= 10000) debugFrameCount=0;
-
-  rotation.x = debugFrameCount * 15;
-  rotation.y = debugFrameCount * 20;
-  rotation.z = debugFrameCount * 10;
 }
 
 const float Object::degToRad(float angle)
