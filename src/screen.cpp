@@ -1,5 +1,4 @@
 #include "screen.h"
-#include <iostream>
 #include <string>
 #include <math.h>
 
@@ -59,9 +58,6 @@ void Screen::show(std::function<void(float deltaTime)> update = {})
 
     // Updates physics
     update(trueElapsed);
-
-    std::cout << "Current FPS: " << std::to_string(1.0f / trueElapsed) << std::endl;
-    std::cout << "Current FPS: " << std::to_string(trueElapsed) << std::endl;
   }
 }
 
