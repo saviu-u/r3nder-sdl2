@@ -5,12 +5,11 @@
 Screen::Screen()
 {
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_CreateWindowAndRenderer(screenSizeX, screenSizeY, 0, &window, &renderer);
+  SDL_CreateWindowAndRenderer(screenSizeX, screenSizeY, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE, &window, &renderer);
 
   // Order dependent
-  refreshAspectRatio();
-  refreshFov();
-  refreshScreenSize();
+  refreshFrameTime();
+  refreshScreenAttributes();
 }
 
 void Screen::addObjectToScene(Object* object)
@@ -70,23 +69,25 @@ void Screen::close()
   SDL_Quit();
 }
 
-void Screen::refreshScreenSize()
-{
-  float angleTangentX = tan(degToRad(Hfov / 2));
-  float angleTangentY = tan(degToRad(Vfov / 2));
-
-  vScreenSizeX = (vScreenDistance * angleTangentX) * 2;
-  vScreenSizeY = (vScreenDistance * angleTangentY) * 2;
-}
-
 // protected
 
 void Screen::verifyScreenInput()
 {
   while (SDL_PollEvent(&event))
   {
-    if (event.type == SDL_QUIT)
-      quit = 1;
+    switch(event.type){
+      case SDL_WINDOWEVENT:
+        switch(event.window.event){
+          case SDL_WINDOWEVENT_SIZE_CHANGED:
+            SDL_GetWindowSize(window, &screenSizeX, &screenSizeY);
+            refreshScreenAttributes();
+            break;
+        }
+        break;
+      case SDL_QUIT:
+        quit = 1;
+        break;
+    }
   }
 }
 
@@ -121,13 +122,28 @@ void Screen::refreshFrameTime(){
   frameTime = 1000 / FpsCap;
 }
 
+void Screen::refreshScreenAttributes(){
+  refreshAspectRatio();
+  refreshFov();
+  refreshVirtualScreenSize();
+}
+
 void Screen::refreshAspectRatio(){
-  aspectRatio = screenSizeX / screenSizeY;
+  aspectRatio = (float) screenSizeX / screenSizeY;
 }
 
 void Screen::refreshFov()
 {
   Vfov = radToDeg(2 * atan(tan(degToRad(Hfov)/2) * 1/aspectRatio));
+}
+
+void Screen::refreshVirtualScreenSize()
+{
+  float angleTangentX = tan(degToRad(Hfov / 2));
+  float angleTangentY = tan(degToRad(Vfov / 2));
+
+  vScreenSizeX = (vScreenDistance * angleTangentX) * 2;
+  vScreenSizeY = (vScreenDistance * angleTangentY) * 2;
 }
 
 // // Specific tools

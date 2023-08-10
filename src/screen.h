@@ -28,7 +28,8 @@ protected:
   void renderObject(Object* object);
 
 private:
-  void refreshScreenSize();
+  void refreshVirtualScreenSize();
+  void refreshScreenAttributes();
   void refreshFov();
   void refreshAspectRatio();
   void refreshFrameTime();
@@ -44,8 +45,8 @@ protected:
   SDL_Event event;
 
   // Screen attributes
-  float screenSizeX = 800;
-  float screenSizeY = 600;
+  int screenSizeX = 800;
+  int screenSizeY = 600;
 
   float FpsCap = 120;
   float Hfov = 90;
