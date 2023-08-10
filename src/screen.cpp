@@ -13,21 +13,12 @@ Screen::Screen()
   refreshScreenSize();
 }
 
-void Screen::refreshAspectRatio(){
-  aspectRatio = screenSizeX / screenSizeY;
-}
-
-void Screen::refreshFov()
-{
-  Vfov = radToDeg(2 * atan(tan(degToRad(Hfov)/2) * 1/aspectRatio));
-}
-
 void Screen::addObjectToScene(Object* object)
 {
   sceneObjects.push_back(object);
 }
 
-void Screen::show(std::function<void(float deltaTime)> update = {})
+void Screen::show(const std::function<void(float deltaTime)> &update = {})
 {
   while (!quit)
   {
@@ -49,8 +40,13 @@ void Screen::show(std::function<void(float deltaTime)> update = {})
     float elapsed = (finishTick - startTick) / (float)SDL_GetPerformanceFrequency();
 
     // Caps the frame if set to it
-    if(FpsCap != 0)
-      SDL_Delay(floor((1000 / FpsCap) - elapsed * 1000));
+    if(FpsCap != 0){
+      float elaspedMs = elapsed * 1000;
+      int64_t framesSkiped = floor(frameTime - elaspedMs);
+
+      if (framesSkiped > 0)
+        SDL_Delay(framesSkiped);
+    }
 
     // Recalculate time elapsed time
     Uint32 finishTickUpdated = SDL_GetPerformanceCounter();
@@ -58,41 +54,6 @@ void Screen::show(std::function<void(float deltaTime)> update = {})
 
     // Updates physics
     update(trueElapsed);
-  }
-}
-
-// Main loop, do the drawing here
-void Screen::renderObjects()
-{
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  for(Object* sceneObject : sceneObjects)
-    renderObject(sceneObject);
-}
-
-void Screen::renderObject(Object* object){
-  std::vector<vec2> screenVertices;
-  for (vec3 vertice : object->calculateVertices())
-  {
-    vec3 screenProjectionPoint = projectIntoScreen(vertice);
-    vec2 screenCoordinates = vScreenToScreen({screenProjectionPoint.x, screenProjectionPoint.y});
-
-    screenVertices.push_back(screenCoordinates);
-  }
-
-  for (std::vector<int> indexes : object->edgeIndexes){
-    vec2 start = screenVertices[indexes[0]];
-    vec2 finish = screenVertices[indexes[1]];
-
-    SDL_RenderDrawLineF(renderer, start.x, start.y, finish.x, finish.y);
-  }
-}
-
-void Screen::verifyScreenInput()
-{
-  while (SDL_PollEvent(&event))
-  {
-    if (event.type == SDL_QUIT)
-      quit = 1;
   }
 }
 
@@ -118,17 +79,60 @@ void Screen::refreshScreenSize()
   vScreenSizeY = (vScreenDistance * angleTangentY) * 2;
 }
 
-const vec3 Screen::projectIntoScreen(vec3 point)
-{
-  float distanceFromScreenCenterX = (point.x / point.z) * vScreenDistance;
-  float distanceFromScreenCenterY = (point.y / point.z) * vScreenDistance;
+// protected
 
-  return {distanceFromScreenCenterX, -distanceFromScreenCenterY, vScreenDistance};
+void Screen::verifyScreenInput()
+{
+  while (SDL_PollEvent(&event))
+  {
+    if (event.type == SDL_QUIT)
+      quit = 1;
+  }
 }
 
-// Specific tools
+void Screen::renderObjects()
+{
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  for(Object* sceneObject : sceneObjects)
+    renderObject(sceneObject);
+}
 
-const vec2 Screen::vScreenToScreen(vec2 globalPoint)
+void Screen::renderObject(Object* object){
+  std::vector<vec2> screenVertices;
+  for (vec3 vertice : object->calculateVertices())
+  {
+    vec3 screenProjectionPoint = projectIntoScreen(vertice);
+    vec2 screenCoordinates = vScreenToScreen({screenProjectionPoint.x, screenProjectionPoint.y});
+
+    screenVertices.push_back(screenCoordinates);
+  }
+
+  for (std::vector<int> indexes : object->edgeIndexes){
+    vec2 start = screenVertices[indexes[0]];
+    vec2 finish = screenVertices[indexes[1]];
+
+    SDL_RenderDrawLineF(renderer, start.x, start.y, finish.x, finish.y);
+  }
+}
+
+// private
+
+void Screen::refreshFrameTime(){
+  frameTime = 1000 / FpsCap;
+}
+
+void Screen::refreshAspectRatio(){
+  aspectRatio = screenSizeX / screenSizeY;
+}
+
+void Screen::refreshFov()
+{
+  Vfov = radToDeg(2 * atan(tan(degToRad(Hfov)/2) * 1/aspectRatio));
+}
+
+// // Specific tools
+
+const vec2 Screen::vScreenToScreen(const vec2 &globalPoint)
 {
   float localPointX = globalPoint.x + vScreenSizeX / 2;
   float localPointY = globalPoint.y + vScreenSizeY / 2;
@@ -138,14 +142,22 @@ const vec2 Screen::vScreenToScreen(vec2 globalPoint)
       localPointY * screenSizeY / vScreenSizeY};
 }
 
-// Tools
+const vec3 Screen::projectIntoScreen(const vec3 &point)
+{
+  float distanceFromScreenCenterX = (point.x / point.z) * vScreenDistance;
+  float distanceFromScreenCenterY = (point.y / point.z) * vScreenDistance;
 
-const float Screen::degToRad(float angle)
+  return {distanceFromScreenCenterX, -distanceFromScreenCenterY, vScreenDistance};
+}
+
+// // Tools
+
+const float Screen::degToRad(const float &angle)
 {
   return angle * (M_PI / 180);
 }
 
-const float Screen::radToDeg(float rad)
+const float Screen::radToDeg(const float &rad)
 {
   return rad * (180 / M_PI);
 }

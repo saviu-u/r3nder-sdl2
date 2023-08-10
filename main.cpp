@@ -5,18 +5,17 @@
 
 int main()
 {
-  Prebuilt::Cube mainCube(100);
-  mainCube.position = { 0, 0, 700 };
-  mainCube.rotation = { 20, 0, 0 };
+  Prebuilt::Cube mainCube(10);
+  mainCube.position = { 0, 0, 70 };
 
-  Prebuilt::Cube cube(50);
-  cube.position = { -200, 0, 700 };
+  Prebuilt::Cube cube(5);
+  cube.position = { -20, 0, 70 };
 
   Screen screen;
   screen.addObjectToScene(&mainCube);
   screen.addObjectToScene(&cube);
 
-  screen.show([&cube, &mainCube] (float deltaTime) {
+  screen.show([&mainCube] (float deltaTime) {
     mainCube.rotation.x += 45 * deltaTime;
     mainCube.rotation.y += 45 * deltaTime;
     mainCube.rotation.z += 45 * deltaTime;

@@ -14,25 +14,26 @@ class Screen
 public:
   Screen();
 
-  void show(std::function<void(float deltaTime)> update);
+  void show(const std::function<void(float deltaTime)> &update);
   void close();
   void cleanScreen();
   void addObjectToScene(Object* object);
 
 protected:
-  const vec2 vScreenToScreen(vec2 point);
-  const vec3 projectIntoScreen(vec3 point);
+  const vec2 vScreenToScreen(const vec2 &globalPoint);
+  const vec3 projectIntoScreen(const vec3 &point);
 
   void verifyScreenInput();
   void renderObjects();
-  void renderObject(Object*);
+  void renderObject(Object* object);
 
 private:
   void refreshScreenSize();
   void refreshFov();
   void refreshAspectRatio();
-  const float degToRad(float degree);
-  const float radToDeg(float rad);
+  void refreshFrameTime();
+  const float degToRad(const float &angle);
+  const float radToDeg(const float &rad);
 
 // Attributes
 
@@ -52,6 +53,7 @@ protected:
 
   // Calculation dependent
 
+  float frameTime;
   float Vfov;
   float aspectRatio;
   float vScreenSizeX;

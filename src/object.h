@@ -8,18 +8,18 @@ class Object
 {
   // Methods
 public:
-  std::vector<vec3> calculateVertices();
-  vec3 updatedVertice(vec3 point);
-  void debugMovement();
+  const std::vector<vec3> calculateVertices();
+  const vec3 updatedVertice(const vec3 point);
+  const void rotateVector(vec3 &point);
+  const void vectorToGlobal(vec3 &point);
 
 protected:
   const float degToRad(float degree);
 
 private:
-  std::vector<vec3> rotationMatrix();
+  const std::vector<vec3> rotationMatrix();
 
   // Attributes
-
 public:
   std::vector<vec3> localVertices;
   std::vector<std::vector<int>> edgeIndexes;
