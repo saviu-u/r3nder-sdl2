@@ -1,7 +1,6 @@
-#include <SDL2/SDL.h>
-#include "src/screen.h"
-#include "src/prebuilt/cube.h"
-#include "src/object.h"
+#include "src/engine/screen.h"
+#include "src/engine/prebuilt/cube.h"
+#include "src/engine/object.h"
 
 int main()
 {
