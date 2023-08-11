@@ -14,7 +14,7 @@ int main()
   screen.addObjectToScene(&mainCube);
   screen.addObjectToScene(&cube);
 
-  screen.show([&mainCube] (float deltaTime) {
+  screen.show([&mainCube] (double deltaTime) {
     mainCube.rotation.x += 45 * deltaTime;
     mainCube.rotation.y += 45 * deltaTime;
     mainCube.rotation.z += 45 * deltaTime;

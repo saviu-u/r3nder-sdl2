@@ -17,7 +17,7 @@ void Screen::addObjectToScene(Object* object)
   sceneObjects.push_back(object);
 }
 
-void Screen::show(const std::function<void(float deltaTime)> &update = {})
+void Screen::show(const std::function<void(double deltaTime)> &update = {})
 {
   while (!quit)
   {
@@ -36,11 +36,11 @@ void Screen::show(const std::function<void(float deltaTime)> &update = {})
 
     // Calculates the tick
     Uint32 finishTick = SDL_GetPerformanceCounter();
-    float elapsed = (finishTick - startTick) / (float)SDL_GetPerformanceFrequency();
+    double elapsed = (finishTick - startTick) / (double)SDL_GetPerformanceFrequency();
 
     // Caps the frame if set to it
     if(FpsCap != 0){
-      float elaspedMs = elapsed * 1000;
+      double elaspedMs = elapsed * 1000;
       int64_t framesSkiped = floor(frameTime - elaspedMs);
 
       if (framesSkiped > 0)
@@ -49,7 +49,7 @@ void Screen::show(const std::function<void(float deltaTime)> &update = {})
 
     // Recalculate time elapsed time
     Uint32 finishTickUpdated = SDL_GetPerformanceCounter();
-    float trueElapsed = (finishTickUpdated - startTick) / (float)SDL_GetPerformanceFrequency();
+    double trueElapsed = (finishTickUpdated - startTick) / (double)SDL_GetPerformanceFrequency();
 
     // Updates physics
     update(trueElapsed);
@@ -99,18 +99,18 @@ void Screen::renderObjects()
 }
 
 void Screen::renderObject(Object* object){
-  std::vector<vec2> screenVertices;
-  for (vec3 vertice : object->calculateVertices())
+  std::vector<Vec2> screenVertices;
+  for (Vec3 vertice : object->calculateVertices())
   {
-    vec3 screenProjectionPoint = projectIntoScreen(vertice);
-    vec2 screenCoordinates = vScreenToScreen({screenProjectionPoint.x, screenProjectionPoint.y});
+    Vec3 screenProjectionPoint = projectIntoScreen(vertice);
+    Vec2 screenCoordinates = vScreenToScreen({screenProjectionPoint.x, screenProjectionPoint.y});
 
     screenVertices.push_back(screenCoordinates);
   }
 
   for (std::vector<int> indexes : object->edgeIndexes){
-    vec2 start = screenVertices[indexes[0]];
-    vec2 finish = screenVertices[indexes[1]];
+    Vec2 start = screenVertices[indexes[0]];
+    Vec2 finish = screenVertices[indexes[1]];
 
     SDL_RenderDrawLineF(renderer, start.x, start.y, finish.x, finish.y);
   }
@@ -129,7 +129,7 @@ void Screen::refreshScreenAttributes(){
 }
 
 void Screen::refreshAspectRatio(){
-  aspectRatio = (float) screenSizeX / screenSizeY;
+  aspectRatio = (double) screenSizeX / screenSizeY;
 }
 
 void Screen::refreshFov()
@@ -139,8 +139,8 @@ void Screen::refreshFov()
 
 void Screen::refreshVirtualScreenSize()
 {
-  float angleTangentX = tan(degToRad(Hfov / 2));
-  float angleTangentY = tan(degToRad(Vfov / 2));
+  double angleTangentX = tan(degToRad(Hfov / 2));
+  double angleTangentY = tan(degToRad(Vfov / 2));
 
   vScreenSizeX = (vScreenDistance * angleTangentX) * 2;
   vScreenSizeY = (vScreenDistance * angleTangentY) * 2;
@@ -148,32 +148,32 @@ void Screen::refreshVirtualScreenSize()
 
 // // Specific tools
 
-const vec2 Screen::vScreenToScreen(const vec2 &globalPoint)
+const Vec2 Screen::vScreenToScreen(const Vec2 &globalPoint) const
 {
-  float localPointX = globalPoint.x + vScreenSizeX / 2;
-  float localPointY = globalPoint.y + vScreenSizeY / 2;
+  double localPointX = globalPoint.x + vScreenSizeX / 2;
+  double localPointY = globalPoint.y + vScreenSizeY / 2;
 
   return {
       localPointX * screenSizeX / vScreenSizeX,
       localPointY * screenSizeY / vScreenSizeY};
 }
 
-const vec3 Screen::projectIntoScreen(const vec3 &point)
+const Vec3 Screen::projectIntoScreen(const Vec3 &point) const
 {
-  float distanceFromScreenCenterX = (point.x / point.z) * vScreenDistance;
-  float distanceFromScreenCenterY = (point.y / point.z) * vScreenDistance;
+  double distanceFromScreenCenterX = (point.x / point.z) * vScreenDistance;
+  double distanceFromScreenCenterY = (point.y / point.z) * vScreenDistance;
 
   return {distanceFromScreenCenterX, -distanceFromScreenCenterY, vScreenDistance};
 }
 
 // // Tools
 
-const float Screen::degToRad(const float &angle)
+double Screen::degToRad(const double &angle) const
 {
   return angle * (M_PI / 180);
 }
 
-const float Screen::radToDeg(const float &rad)
+double Screen::radToDeg(const double &rad) const
 {
   return rad * (180 / M_PI);
 }

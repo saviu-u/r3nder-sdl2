@@ -1,19 +1,19 @@
 #include "object.h"
 #include <math.h>
 
-const std::vector<vec3> Object::calculateVertices()
+const std::vector<Vec3> Object::calculateVertices() const
 {
-  std::vector<vec3> newVertices;
+  std::vector<Vec3> newVertices;
 
-  for (vec3 point : localVertices)
+  for (Vec3 point : localVertices)
     newVertices.push_back(updatedVertice(point));
 
   return newVertices;
 }
 
-const vec3 Object::updatedVertice(const vec3 point)
+const Vec3 Object::updatedVertice(const Vec3 point) const
 {
-  vec3 newPoint = point;
+  Vec3 newPoint = point;
 
   rotateVector(newPoint);
   vectorToGlobal(newPoint);
@@ -21,49 +21,38 @@ const vec3 Object::updatedVertice(const vec3 point)
   return newPoint;
 }
 
-const void Object::rotateVector(vec3 &point){
-  std::vector<vec3> cachedRotationMatrix = rotationMatrix();
-  float rotationOutput[3] = {0, 0, 0};
-
-  for(int i = 0 ; i < 3 ; i++){
-    rotationOutput[i] += point.x * cachedRotationMatrix[i].x;
-    rotationOutput[i] += point.y * cachedRotationMatrix[i].y;
-    rotationOutput[i] += point.z * cachedRotationMatrix[i].z;
-  }
-
-  point.x = rotationOutput[0];
-  point.y = rotationOutput[1];
-  point.z = rotationOutput[2];
+void Object::rotateVector(Vec3 &point) const {
+  point = rotationMatrix().multiply(point);
 }
 
-const void Object::vectorToGlobal(vec3 &point){
+void Object::vectorToGlobal(Vec3 &point) const {
   point.x += position.x;
   point.y += position.y;
   point.z += position.z;
 }
 
-const std::vector<vec3> Object::rotationMatrix(){
-  float rad_x = degToRad(rotation.x);
-  float rad_y = degToRad(rotation.y);
-  float rad_z = degToRad(rotation.z);
+const Matrix3 Object::rotationMatrix() const {
+  double rad_x = degToRad(rotation.x);
+  double rad_y = degToRad(rotation.y);
+  double rad_z = degToRad(rotation.z);
 
-  float sin_x = sin(rad_x);
-  float cos_x = cos(rad_x);
+  double sin_x = sin(rad_x);
+  double cos_x = cos(rad_x);
 
-  float sin_y = sin(rad_y);
-  float cos_y = cos(rad_y);
+  double sin_y = sin(rad_y);
+  double cos_y = cos(rad_y);
 
-  float sin_z = sin(rad_z);
-  float cos_z = cos(rad_z);
+  double sin_z = sin(rad_z);
+  double cos_z = cos(rad_z);
 
-  return {
+  return Matrix3({
     { cos_z * cos_y                        , sin_z * cos_y                        , - sin_y       },
     { cos_z * sin_y * sin_x - sin_z * cos_x, sin_z * sin_y * sin_x + cos_z * cos_x, cos_y * sin_x },
     { cos_z * sin_y * cos_x + sin_z * sin_x, sin_z * sin_y * cos_x - cos_z * sin_x, cos_y * cos_x }
-  };
+  });
 }
 
-const float Object::degToRad(float angle)
+double Object::degToRad(double angle) const
 {
   return angle * (M_PI / 180);
 }

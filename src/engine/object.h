@@ -2,31 +2,31 @@
 
 #include <vector>
 
-#include "space.h"
+#include "space/matrix.h"
 
 class Object
 {
   // Methods
 public:
-  const std::vector<vec3> calculateVertices();
-  const vec3 updatedVertice(const vec3 point);
-  const void rotateVector(vec3 &point);
-  const void vectorToGlobal(vec3 &point);
+  const std::vector<Vec3> calculateVertices() const;
+  const Vec3 updatedVertice(const Vec3 point) const;
+  void rotateVector(Vec3 &point) const;
+  void vectorToGlobal(Vec3 &point) const;
 
 protected:
-  const float degToRad(float degree);
+  double degToRad(double degree) const;
 
 private:
-  const std::vector<vec3> rotationMatrix();
+  const Matrix3 rotationMatrix() const;
 
   // Attributes
 public:
-  std::vector<vec3> localVertices;
+  std::vector<Vec3> localVertices;
   std::vector<std::vector<int>> edgeIndexes;
 
-  vec3 position = {0, 0, 0};
-  vec3 rotation = {0, 0, 0};
+  Vec3 position = {0, 0, 0};
+  Vec3 rotation = {0, 0, 0};
 
 private:
-  float debugFrameCount = 0;
+  double debugFrameCount = 0;
 };

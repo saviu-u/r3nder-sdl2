@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "object.h"
-#include "space.h"
+#include "space/vec.h"
 
 class Screen
 {
@@ -14,14 +14,14 @@ class Screen
 public:
   Screen();
 
-  void show(const std::function<void(float deltaTime)> &update);
+  void show(const std::function<void(double deltaTime)> &update);
   void close();
   void cleanScreen();
   void addObjectToScene(Object* object);
 
 protected:
-  const vec2 vScreenToScreen(const vec2 &globalPoint);
-  const vec3 projectIntoScreen(const vec3 &point);
+  const Vec2 vScreenToScreen(const Vec2 &globalPoint) const;
+  const Vec3 projectIntoScreen(const Vec3 &point) const;
 
   void verifyScreenInput();
   void renderObjects();
@@ -33,8 +33,8 @@ private:
   void refreshFov();
   void refreshAspectRatio();
   void refreshFrameTime();
-  const float degToRad(const float &angle);
-  const float radToDeg(const float &rad);
+  double degToRad(const double &angle) const;
+  double radToDeg(const double &rad) const;
 
 // Attributes
 
@@ -48,17 +48,17 @@ protected:
   int screenSizeX = 800;
   int screenSizeY = 600;
 
-  float FpsCap = 120;
-  float Hfov = 90;
-  float vScreenDistance = 1; // Centimeter
+  double FpsCap = 120;
+  double Hfov = 90;
+  double vScreenDistance = 1; // Centimeter
 
   // Calculation dependent
 
-  float frameTime;
-  float Vfov;
-  float aspectRatio;
-  float vScreenSizeX;
-  float vScreenSizeY;
+  double frameTime;
+  double Vfov;
+  double aspectRatio;
+  double vScreenSizeX;
+  double vScreenSizeY;
 
   // Objects
   std::vector<Object*> sceneObjects;

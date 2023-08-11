@@ -2,7 +2,7 @@
 
 namespace Prebuilt
 {
-  Cube::Cube(vec3 size)
+  Cube::Cube(Vec3 size)
   {
     localVertices = {
       {-size.x, -size.y, -size.z},
