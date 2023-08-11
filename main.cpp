@@ -1,6 +1,6 @@
-#include "src/engine/screen.h"
-#include "src/engine/prebuilt/cube.h"
-#include "src/engine/object.h"
+#include "screen.h"
+#include "prebuilt/cube.h"
+#include "object.h"
 
 int main()
 {

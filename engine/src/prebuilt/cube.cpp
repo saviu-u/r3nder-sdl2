@@ -1,4 +1,4 @@
-#include "cube.h"
+#include "prebuilt/cube.h"
 
 namespace Prebuilt
 {

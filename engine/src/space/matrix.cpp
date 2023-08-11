@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "space/matrix.h"
 
 const Vec3 Matrix3::multiply(const Vec3 &vector3) const
 {
