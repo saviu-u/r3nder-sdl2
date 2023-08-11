@@ -10,7 +10,11 @@ find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
 
 file(GLOB_RECURSE ENGINE engine/src/*.cpp)
-add_executable(r3nder ${ENGINE} main.cpp)
+file(GLOB_RECURSE CUSTOM_SRCS custom/src/*.cpp)
+
+add_executable(r3nder ${ENGINE} ${CUSTOM_SRCS} main.cpp)
+
+target_include_directories(r3nder PRIVATE custom/include engine/include)
 
 # SDL2::SDL2main may or may not be available. It is e.g. required by Windows GUI applications
 if(TARGET SDL2::SDL2main)
@@ -20,8 +24,6 @@ endif()
 
 # Link to the actual SDL2 library. SDL2::SDL2 is the shared SDL library, SDL2::SDL2-static is the static SDL libarary.
 target_link_libraries(r3nder PRIVATE SDL2::SDL2)
-
-target_include_directories(r3nder PRIVATE src engine/include)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

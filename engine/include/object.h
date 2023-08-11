@@ -9,15 +9,18 @@ class Object
   // Methods
 public:
   const std::vector<Vec3> calculateVertices() const;
-  const Vec3 updatedVertice(const Vec3 point) const;
-  void rotateVector(Vec3 &point) const;
-  void vectorToGlobal(Vec3 &point) const;
+
+  virtual void start() {}
+  virtual void update(double deltaTime) {}
 
 protected:
   double degToRad(double degree) const;
 
 private:
   const Matrix3 rotationMatrix() const;
+  const Vec3 updatedVertice(const Vec3 point) const;
+  void rotateVector(Vec3 &point) const;
+  void vectorToGlobal(Vec3 &point) const;
 
   // Attributes
 public:

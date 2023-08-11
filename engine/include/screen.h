@@ -14,7 +14,7 @@ class Screen
 public:
   Screen();
 
-  void show(const std::function<void(double deltaTime)> &update);
+  void show();
   void close();
   void cleanScreen();
   void addObjectToScene(Object* object);
@@ -26,6 +26,7 @@ protected:
   void verifyScreenInput();
   void renderObjects();
   void renderObject(Object* object);
+  void updateObjects(const double deltaTime);
 
 private:
   void refreshVirtualScreenSize();

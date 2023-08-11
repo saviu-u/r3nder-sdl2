@@ -15,9 +15,10 @@ Screen::Screen()
 void Screen::addObjectToScene(Object* object)
 {
   sceneObjects.push_back(object);
+  object->start();
 }
 
-void Screen::show(const std::function<void(double deltaTime)> &update = {})
+void Screen::show()
 {
   while (!quit)
   {
@@ -52,7 +53,7 @@ void Screen::show(const std::function<void(double deltaTime)> &update = {})
     double trueElapsed = (finishTickUpdated - startTick) / (double)SDL_GetPerformanceFrequency();
 
     // Updates physics
-    update(trueElapsed);
+    updateObjects(trueElapsed);
   }
 }
 
@@ -114,6 +115,11 @@ void Screen::renderObject(Object* object){
 
     SDL_RenderDrawLineF(renderer, start.x, start.y, finish.x, finish.y);
   }
+}
+
+void Screen::updateObjects(double deltaTime){
+  for(Object* sceneObject : sceneObjects)
+    sceneObject->update(deltaTime);
 }
 
 // private

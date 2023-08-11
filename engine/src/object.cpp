@@ -1,6 +1,8 @@
 #include "object.h"
 #include <math.h>
 
+// public
+
 const std::vector<Vec3> Object::calculateVertices() const
 {
   std::vector<Vec3> newVertices;
@@ -11,25 +13,14 @@ const std::vector<Vec3> Object::calculateVertices() const
   return newVertices;
 }
 
-const Vec3 Object::updatedVertice(const Vec3 point) const
+// protected
+
+double Object::degToRad(double angle) const
 {
-  Vec3 newPoint = point;
-
-  rotateVector(newPoint);
-  vectorToGlobal(newPoint);
-
-  return newPoint;
+  return angle * (M_PI / 180);
 }
 
-void Object::rotateVector(Vec3 &point) const {
-  point = rotationMatrix().multiply(point);
-}
-
-void Object::vectorToGlobal(Vec3 &point) const {
-  point.x += position.x;
-  point.y += position.y;
-  point.z += position.z;
-}
+// private
 
 const Matrix3 Object::rotationMatrix() const {
   double rad_x = degToRad(rotation.x);
@@ -52,7 +43,22 @@ const Matrix3 Object::rotationMatrix() const {
   });
 }
 
-double Object::degToRad(double angle) const
+const Vec3 Object::updatedVertice(const Vec3 point) const
 {
-  return angle * (M_PI / 180);
+  Vec3 newPoint = point;
+
+  rotateVector(newPoint);
+  vectorToGlobal(newPoint);
+
+  return newPoint;
+}
+
+void Object::rotateVector(Vec3 &point) const {
+  point = rotationMatrix().multiply(point);
+}
+
+void Object::vectorToGlobal(Vec3 &point) const {
+  point.x += position.x;
+  point.y += position.y;
+  point.z += position.z;
 }

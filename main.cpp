@@ -1,10 +1,10 @@
 #include "screen.h"
 #include "prebuilt/cube.h"
-#include "object.h"
+#include "custom_cube.h"
 
 int main()
 {
-  Prebuilt::Cube mainCube(10);
+  CustomCube mainCube(10);
   mainCube.position = { 0, 0, 70 };
 
   Prebuilt::Cube cube(5);
@@ -14,11 +14,7 @@ int main()
   screen.addObjectToScene(&mainCube);
   screen.addObjectToScene(&cube);
 
-  screen.show([&mainCube] (double deltaTime) {
-    mainCube.rotation.x += 45 * deltaTime;
-    mainCube.rotation.y += 45 * deltaTime;
-    mainCube.rotation.z += 45 * deltaTime;
-  });
+  screen.show();
   screen.close();
 
   return 0;
